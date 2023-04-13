@@ -110,3 +110,21 @@ function addUser($data){
     
     return $user;
   }
+
+  function LoginAdmin($data){
+
+
+    include '../connect.php';
+
+    $email=$data['email'];
+    $password=md5($data['pwda']);
+
+    $sqlQ="SELECT * FROM admin WHERE email='$email' and pwda='$password'";
+
+    $resultat = $conn->query($sqlQ);
+
+    $admin=$resultat->fetch();
+    
+    return $admin;
+}
+?>

@@ -1,23 +1,22 @@
 <?php
 session_start();
 //if there is no logged user
-if(isset($_SESSION['username'])){
-  header('location:profile.php');
+if(isset($_SESSION['nom'])){
+  //header('location:profile.php');
 }
-include('connect.php');
-include 'inc/func.php';
-$user = true; 
+include('../connect.php');
+include '../inc/func.php';
+$admin = true; 
 if(!empty($_POST)){ 
-  $user = userLogin($_POST);
+ $admin = LoginAdmin($_POST);
 
-  if(is_array($user) && count($user)>0){
+  if(is_array($admin) &&  count($admin)>0){
     session_start();
-    $_SESSION['email'] = $user['email'] ;
-    $_SESSION['username'] = $user['username'];
-    $_SESSION['password'] = $user['password'];
-    $_SESSION['phone'] = $user['phone'];
-    $_SESSION['city'] = $user['city'];
-    header('location:profile.php');
+    $_SESSION['email'] = $admin['email'] ;
+    $_SESSION['nom'] = $admin['nom'];
+    $_SESSION['pwda'] = $admin['pwda'];
+
+    header('location:profileA.php');
   }
 }
 
@@ -35,11 +34,11 @@ if(!empty($_POST)){
 </head>
 
 <body>
-  <?php include('inc/navbar.php'); ?>
+  
 
-  <h1 style="text-align: center; margin-top: 35px;">Log IN</h1>
+  <h1 style="text-align: center; margin-top: 35px;">Admin Log IN</h1>
   <div class="col-12 p-5">
-    <form action="Login.php" method="post">
+    <form action="LoginA.php" method="post">
       <div class="mb-3 mr-3 ml-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
         <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
@@ -47,17 +46,17 @@ if(!empty($_POST)){
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+        <input type="password" class="form-control" name="pwda" id="exampleInputPassword1">
       </div>
       <button type="submit" class="btn btn-primary">Log In</button>
     </form>
   </div>
-  <?php  include('inc/footer.php');?>
+  <?php  include('../inc/footer.php');?>
 
 </body>
 <?php  
 
-if(!$user){
+if(!$admin){
   print "
   <script > alert('email or password invalid !')</script>
   ";
@@ -65,9 +64,6 @@ if(!$user){
 
 ?>
 
-  <!-- footer -->
-  <div class="bg-dark text-center p-4 mt-3">
-    <p class="text-white">Created by Mouheb And Khalil</p>
-  </div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min
