@@ -120,6 +120,12 @@ $categories = GetCategory();
                  echo print '<div class="alert alert-success">Category successfully</div>';
               }
             ?>
+            <?php
+              if(isset($_GET['deleted']) && $_GET['deleted']=="ok"){echo print '<div class="alert alert-success">deleted successfully</div>';}
+            ?>
+            <?php
+              if(isset($_GET['modified']) && $_GET['modified']=="ok"){echo print '<div class="alert alert-success" >modified successfully</div>';}
+            ?>
 
         <!-- table -->
         <!-- <div> -->
@@ -143,8 +149,8 @@ $categories = GetCategory();
                       <td>' . $cat['nom_c'] . '</td>
                       <td>' . $cat['description'] . '</td>
                       <td>
-                        <a href="" class="btn btn-success">Modify</a>
-                        <a href="" class="btn btn-danger">Delete</a>
+                        <a data-toggle="modal" data-target="#modifyModal'.$cat['id_c'].'" class="btn btn-success">Modify</a>
+                        <a href="delete.php?id_c='.$cat['id_c'].'" class="btn btn-danger">Delete</a>
                       </td>
                     </tr>
                  <tr>
@@ -158,10 +164,9 @@ $categories = GetCategory();
       </main>
     </div>
   </div>
-  <!-- Button trigger modal -->
 
 
-<!-- Modal -->
+<!-- Modal  add-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -174,9 +179,9 @@ $categories = GetCategory();
       <div class="modal-body">
         <form method="post" action="add.php">
               <div class="form-group">
-                <input type="text" class="form-control" name="nomCat" placeholder="Category name">
+                <input type="text" class="form-control" name="nomCat" placeholder="Category name" required>
                   <br>
-                <textarea  class="form-control" name="descriptionCat" placeholder="Description"></textarea>
+                <textarea  class="form-control" name="descriptionCat" placeholder="Description" required></textarea>
               </div>
     </div>
       <div class="modal-footer">
@@ -185,7 +190,42 @@ $categories = GetCategory();
       </form>
     </div>
   </div>
+</div>  
+
+<?php 
+
+  foreach($categories as $index =>$cat){?>
+  <!-- Modal  Modify-->
+<div class="modal fade" id="modifyModal<?php echo $cat['id_c'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modifyModal">Modify category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="modify.php">
+              <div class="form-group">
+                <input type="hidden" value="<?php echo $cat['id_c'];?>" name="id_c" required>
+                <input type="text" class="form-control" name="nomCat" value="<?php echo $cat['nom_c'] ?>" required placeholder="Category name">
+                  <br>
+                <textarea  class="form-control" name="descriptionCat"  placeholder="Description"><?php echo $cat['description'] ?></textarea>
+              </div>
+    </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Modify</button>
+      </div>
+      </form>
+    </div>
+  </div>
 </div>
+    <?php
+  }
+
+?>
+
 
   <!-- Bootstrap core JavaScript
     ================================================== -->
