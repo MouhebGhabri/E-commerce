@@ -12,6 +12,7 @@ if(!empty($_POST)){
 
   if(is_array($admin) &&  count($admin)>0){
     session_start();
+    $_SESSION['id_a']=$admin['id_a'];
     $_SESSION['email'] = $admin['email'] ;
     $_SESSION['nom'] = $admin['nom'];
     $_SESSION['pwda'] = $admin['pwda'];
