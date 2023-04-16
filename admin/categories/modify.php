@@ -17,6 +17,7 @@
   // $conn = Connect();
   include "../../connect.php";
 
+try{
   //sql query
   $sqlQ="UPDATE `categories` SET `nom_c`='$nomC',`description`='$descriptionC',`createur`=$creator,`date_modification`=$date_m WHERE `id_c`=$idd";
   
@@ -27,4 +28,9 @@
     header('location:list.php?modified=ok');
   }
 
+}catch(PDOException $e){
+  if($e->getCode() == 23000){
+    header('location:list.php?err=dup');
+  }
+}
 ?>

@@ -15,7 +15,10 @@
   // $conn = Connect();
   include "../../connect.php";
 
-  //sql query
+
+  try{
+    
+      //sql query
   $sqlQ="INSERT INTO categories(`nom_c`, `description`, `createur`,`date_creation`) VALUES ('$nomC','$descriptionC','$creator',$date_c)";
   
   //exec
@@ -23,6 +26,14 @@
 
   if($result){
     header('location:list.php?added=ok');
+  }
+
+  }catch(PDOException $e){
+
+    if($e->getCode() == 23000){
+      header('location:list.php?err=dup');
+    }
+
   }
 
 ?>

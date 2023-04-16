@@ -114,10 +114,10 @@ $categories = GetCategory();
             <a  data-toggle="modal" data-target="#exampleModal"  class="text-primary" style="text-decoration:underline;">Add</a>
           </div>
         </div>
-        <!-- check if cat is added -->
+        <!-- check if cat is added modified duplication deleted -->
             <?php
               if(isset($_GET['added']) && $_GET['added']=="ok"){
-                 echo print '<div class="alert alert-success">Category successfully</div>';
+                 echo print '<div class="alert alert-success">Category added successfully</div>';
               }
             ?>
             <?php
@@ -125,6 +125,11 @@ $categories = GetCategory();
             ?>
             <?php
               if(isset($_GET['modified']) && $_GET['modified']=="ok"){echo print '<div class="alert alert-success" >modified successfully</div>';}
+            ?>
+            <?php
+              if(isset($_GET['err']) && $_GET['err']=="dup"){
+                 echo print '<div class="alert alert-danger">Category not added or modified because of  data duplication</div>';
+              }
             ?>
 
         <!-- table -->
