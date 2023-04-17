@@ -33,18 +33,28 @@ if(isset($_GET['id_p'])){
       <div class="card-body">
         <h5 class="card-title"><?php echo $produit['nom']?></h5>
         <p class="card-text"><?php echo $produit['description']?></p>
+        <li class="list-group-item"><?php echo $produit['prix']?> dt</li>
+
       </div>
       <ul class="list-group list-group-flush">
-        <!-- <li class="list-group-item"><?php echo $produit['categorie']?></li> -->
-        <li class="list-group-item"><?php echo $produit['prix']?> dt</li>
+        <?php 
+          foreach($categories as $index => $c){
+                if($c['id_c']==$produit['categorie']){
+
+                  print'<button class="btn btn-success mb-2">'.$c['nom_c'].'</button>
+                  ';
+                }
+          }
+        ?>
       </ul>
+      
   </div>
   <div>
-    <form ation="">
+    <!-- <form ation="">
       <input type="hidden" value="<?php echo $produit['id_p']?>" name="produit">
       <input type="number" name="quantite" class="form-control" step="1">
       <button class="btn btn-primary">add to cart</button>  
-  </form>
+  </form> -->
   </div>
 
 

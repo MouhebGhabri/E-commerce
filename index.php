@@ -32,7 +32,7 @@ session_start();
       foreach($produits as $produit ){
         //passing the id "produits.php?id_p ...
         print '
-        <div class="col-3 mt-1 mb-1" >
+        <div class="col-3 mt-2 mb-1" >
           <div class="card" style="width: 18rem;">
             <img src="imgs/'.$produit['image'].'" class="card-img-top" alt="...">
             <div class="card-body">

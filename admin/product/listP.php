@@ -4,27 +4,36 @@ session_start();
 include "../../connect.php";
 function getCategory()
 {
+  include '../../connect.php';
+  // sql query
+  $sqlQ = "SELECT * FROM `categories`";
+  //exec
+  $result = $conn->query($sqlQ);
+  //Display
+  $categories = $result->fetchAll();
+  //check : var_dump($categories);
+  return $categories;
+}
+$categories = GetCategory();
+function getProducts(){
 
 
   include '../../connect.php';
   // sql query
-  $sqlQ = "SELECT * FROM `categories`";
+  $sqlQ = "SELECT * FROM `produits`";
 
   //exec
   $result = $conn->query($sqlQ);
 
   //Display
 
-  $categories = $result->fetchAll();
+  $produits= $result->fetchAll();
 
   //check : var_dump($categories);
 
-  return $categories;
+  return $produits;  
 }
-$categories = GetCategory();
-
-
-
+$product=getProducts();
 
 ?>
 <!doctype html>
@@ -64,16 +73,16 @@ $categories = GetCategory();
     <?php  include '../template/navA.php'; ?>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">Categories list</h1>
+          <h1 class="h2">Product list</h1>
 
           <div>
             <a  data-toggle="modal" data-target="#exampleModal"  class="text-primary" style="text-decoration:underline;">Add</a>
           </div>
         </div>
         <!-- check if cat is added modified duplication deleted -->
-            <?php
+        <?php
               if(isset($_GET['added']) && $_GET['added']=="ok"){
-                 echo print '<div class="alert alert-success">Category added successfully</div>';
+                 echo print '<div class="alert alert-success">Product added successfully</div>';
               }
             ?>
             <?php
@@ -84,9 +93,10 @@ $categories = GetCategory();
             ?>
             <?php
               if(isset($_GET['err']) && $_GET['err']=="dup"){
-                 echo print '<div class="alert alert-danger">Category not added or modified because of duplicated data </div>';
+                 echo print '<div class="alert alert-danger">Product not added or modified because of  data x²</div>';
               }
             ?>
+
 
         <!-- table -->
         <!-- <div> -->
@@ -96,22 +106,26 @@ $categories = GetCategory();
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
-                <th scope="col">Action</th>
+                <th scope="col">Price</th>
+                <th scope="col">Image path</th>
               </tr>
             </thead>
             <tbody>
 
-              <?php
+            <?php
               $i = 0;
-              foreach ($categories as $cat) {
+              foreach ($product as $prod) {
                 $i++;
                 echo print ' 
                       <th scope="row">' . $i . '</th>
-                      <td>' . $cat['nom_c'] . '</td>
-                      <td>' . $cat['description'] . '</td>
+                      <td>' . $prod['nom'] . '</td>
+                      <td>' . $prod['description'] . '</td>
+                      <td>' . $prod['prix'] . '</td>
+                      <td>imgs/' . $prod['image'] . '</td>
+
                       <td>
-                        <a data-toggle="modal" data-target="#modifyModal'.$cat['id_c'].'" class="btn btn-success">Modify</a>
-                        <a onClick="return popUpDeleteConfirm()"  href="delete.php?id_c='.$cat['id_c'].'" class="btn btn-danger">Delete</a>
+                        <a data-toggle="modal" data-target="#modifyModal'.$prod['id_p'].'" class="btn btn-success">Modify</a>
+                        <a onClick="return popUpDeleteConfirm()" href="deleteP.php?id_p='.$prod['id_p'].'" class="btn btn-danger">Delete</a>
                       </td>
                     </tr>
                  <tr>
@@ -131,19 +145,35 @@ $categories = GetCategory();
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add category</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add product</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" action="add.php">
+        <form method="post" action="addP.php" enctype="multipart/form-data">
               <div class="form-group">
-                <input type="text" class="form-control" name="nomCat" placeholder="Category name" required>
+                <input type="text" class="form-control" name="nomProd" placeholder="Product name" required>
                   <br>
-                <textarea  class="form-control" name="descriptionCat" placeholder="Description" required></textarea>
+                <textarea  class="form-control" name="descriptionProd" placeholder="Description" required></textarea>
+                <br>
+                <input type="number" step="0.01" class="form-control" name="prix" placeholder="Product price " required>
+                <br>
+                <input type="file" class="form-control" name="imgProd" require>
               </div>
     </div>
+
+    <div class="form-group">
+        <select class="form-control" name="categ">
+          <?php
+              foreach($categories as $index => $catP){
+                echo print'<option value="'.$catP['id_c'].'">'.$catP['nom_c'].'</option>
+                ';
+              }
+          ?>
+        </select>
+    </div>
+    <input type="hidden" name="creator" value="<?php echo $_SESSION['id_a'] ?>">
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary">Add</button>
       </div>
@@ -154,25 +184,39 @@ $categories = GetCategory();
 
 <?php 
 
-  foreach($categories as $index =>$cat){?>
+  foreach($product as $index =>$prod){?>
   <!-- Modal  Modify-->
-<div class="modal fade" id="modifyModal<?php echo $cat['id_c'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modifyModal<?php echo $prod['id_p'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modifyModal">Modify category</h5>
+        <h5 class="modal-title" id="modifyModal">Modify product</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" action="modify.php">
+        <form method="post" action="modifyP.php" enctype="multipart/form-data">
               <div class="form-group">
-                <input type="hidden" value="<?php echo $cat['id_c'];?>" name="id_c" required>
-                <input type="text" class="form-control" name="nomCat" value="<?php echo $cat['nom_c'] ?>" required placeholder="Category name">
+                <input type="hidden" value="<?php echo $prod['id_p'];?>" name="id_p" required>
+                <input type="text" class="form-control" name="nomProd" value="<?php echo $prod['nom'] ?>" required placeholder="Product name">
                   <br>
-                <textarea  class="form-control" name="descriptionCat"  placeholder="Description"><?php echo $cat['description'] ?></textarea>
+                <textarea  class="form-control" name="descriptionProd"  placeholder="Description"><?php echo $prod['description'] ?></textarea>
+                <br>
+                <input type="number" step="0.01" class="form-control" name="prix" placeholder="Product price " required>
+                <br>
+                <input type="file" class="form-control" name="imgProd" require>
               </div>
+              <div class="form-group">
+        <select class="form-control" name="categ">
+          <?php
+              foreach($categories as $index => $catP){
+                echo print'<option value="'.$catP['id_c'].'">'.$catP['nom_c'].'</option>
+                ';
+              }
+          ?>
+        </select>
+    </div>
     </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary">Modify</button>
@@ -207,11 +251,12 @@ $categories = GetCategory();
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.min.js"></script>
   <script>
 
-    function popUpDeleteConfirm(){
-        return confirm("do you want to confim your action");
-    }
+function popUpDeleteConfirm(){
+    return confirm("do you want to confim your action");
+}
 
-  </script>
+</script>
+
 </body>
 
 </html>
