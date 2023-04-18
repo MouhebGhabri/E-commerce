@@ -101,15 +101,23 @@ function addUser($data){
 
     $mphash=md5($data['password']);
 
-   $sqlQ = "INSERT INTO `user`(`username`, `email`, `password`, `phone`, `city`) VALUES ('".$data['username']."','".$data['email']."','".$mphash."','".$data['phone']."','".$data['city']."')";
+    try{
+      $sqlQ = "INSERT INTO `user`(`username`, `email`, `password`, `phone`, `city`) VALUES ('".$data['username']."','".$data['email']."','".$mphash."','".$data['phone']."','".$data['city']."')";
 
-   $resultat = $conn->query($sqlQ);
+      $resultat = $conn->query($sqlQ);
+   
+     if($resultat){
+       return true;
+     }else{
+       return false;
+     }
+    }catch(PDOException $e){
+      if($e->getCode() == 23000){
+        echo print'<script > alert("Email or username already exist")</script>';
+      }
+    }
 
-  if($resultat){
-    return true;
-  }else{
-    return false;
-  }
+
   }
 
   function userLogin($data){
