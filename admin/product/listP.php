@@ -174,6 +174,7 @@ $product=getProducts();
         </select>
     </div>
     <input type="hidden" name="creator" value="<?php echo $_SESSION['id_a'] ?>">
+    <input type="number" name="qtt" placeholder="Quantite" required>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary">Add</button>
       </div>
