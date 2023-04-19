@@ -1,6 +1,8 @@
 <?php
 session_start();
-
+if(!isset($_SESSION['nom'])){
+  header('location:../LoginA.php');
+}
 include "../../connect.php";
 function getUsers()
 {
@@ -54,7 +56,7 @@ $userL =getUsers();
     <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
     <ul class="navbar-nav px-3">
       <li class="nav-item text-nowrap">
-        <a class="nav-link" href="../../Logout.php">Log out</a>
+        <a class="nav-link" href="../LogoutA.php">Log out</a>
       </li>
     </ul>
   </nav>

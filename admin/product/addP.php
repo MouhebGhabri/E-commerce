@@ -11,6 +11,7 @@
   $category=$_POST['categ'];
   $price=$_POST['prix'];
   $creator=$_POST['creator'];
+  $qtte=$_POST['quantite'];
   $date =date("Y-m-d");
 
 
@@ -34,14 +35,25 @@ $sqlQ="INSERT INTO `produits`(`nom`, `description`, `image`, `prix`, `categorie`
 //exec
 $result=$conn->exec($sqlQ);
 
+//exec
+
+
 if($result){
-header('location:listP.php?added=ok');
+
+  if($conn->lastInsertId()){
+    $prodID=$conn->lastInsertId();
+    $result1=$conn->exec("INSERT INTO `stock`(`produit`, `quantite`, `createur`, `date_creation`) VALUES('$prodID','$qtte','$creator','$date')");
+    header('location:listP.php?added=ok');
+  }else{echo "err";}
+  
+
 }
 
 }catch(PDOException $e){
 
 if($e->getCode() == 23000){
-  header('location:listP.php?err=dup');
+  echo $e;
+  //header('location:listP.php?err=dup');
 }
 }
  

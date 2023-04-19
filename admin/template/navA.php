@@ -20,6 +20,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="http://<?php echo $_SERVER['HTTP_HOST'];?>/WebProject/admin/stock/listS.php">
+                  <span data-feather="shopping-cart"></span>
+                  Stock
+                </a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="http://<?php echo $_SERVER['HTTP_HOST'];?>/WebProject/admin/users/listU.php">
                   <span data-feather="users"></span>
                   Customers

@@ -38,6 +38,22 @@ function getProducts()
 }
 $product = getProducts();
 
+function getStock(){
+  
+  include '../../connect.php';
+  // sql query
+  $sqlQ = "SELECT id_s,id_p,nom,id_s,produit,quantite FROM `stock`,`produits` WHERE stock.produit=produits.id_p";
+
+  //exec
+  $result = $conn->query($sqlQ);
+
+  //Display
+
+  $stock = $result->fetchAll();
+  return $stock;
+}
+$stock=getStock();
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -76,23 +92,13 @@ $product = getProducts();
       <?php include '../template/navA.php'; ?>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">Product list</h1>
+          <h1 class="h2">Product stock list</h1>
 
-          <div>
+          <!-- <div>
             <a data-toggle="modal" data-target="#exampleModal" class="text-primary" style="text-decoration:underline;">Add</a>
-          </div>
+          </div> -->
         </div>
         <!-- check if cat is added modified duplication deleted -->
-        <?php
-        if (isset($_GET['added']) && $_GET['added'] == "ok") {
-          echo print '<div class="alert alert-success">Product added successfully</div>';
-        }
-        ?>
-        <?php
-        if (isset($_GET['deleted']) && $_GET['deleted'] == "ok") {
-          echo print '<div class="alert alert-success">deleted successfully</div>';
-        }
-        ?>
         <?php
         if (isset($_GET['modified']) && $_GET['modified'] == "ok") {
           echo print '<div class="alert alert-success" >modified successfully</div>';
@@ -111,28 +117,25 @@ $product = getProducts();
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Description</th>
-              <th scope="col">Price</th>
-              <th scope="col">Image path</th>
+              <th scope="col">Product</th>
+              <th scope="col">Quantite</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
 
             <?php
+            
             $i = 0;
-            foreach ($product as $prod) {
+            foreach ($stock as $st) {
               $i++;
               echo print ' 
                       <th scope="row">' . $i . '</th>
-                      <td>' . $prod['nom'] . '</td>
-                      <td>' . $prod['description'] . '</td>
-                      <td>' . $prod['prix'] . '</td>
-                      <td>imgs/' . $prod['image'] . '</td>
-
+                      <td>'.$st['nom'].'</td>
+                      <td>' . $st['quantite'] . '</td>
+                      <td>' . $st['produit'] . '</td>
                       <td>
-                        <a data-toggle="modal" data-target="#modifyModal' . $prod['id_p'] . '" class="btn btn-success">Modify</a>
-                        <a onClick="return popUpDeleteConfirm()" href="deleteP.php?id_p=' . $prod['id_p'] . '" class="btn btn-danger">Delete</a>
+                        <a data-toggle="modal" data-target="#modifyModal' . $st['id_s'] . '" class="btn btn-success">Modify</a>
                       </td>
                     </tr>
                  <tr>
@@ -145,87 +148,26 @@ $product = getProducts();
     </main>
   </div>
   </div>
-
-
-  <!-- Modal  add-->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add product</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form method="post" action="addP.php" enctype="multipart/form-data">
-            <div class="form-group ">
-              <input type="text" class="form-control" name="nomProd" placeholder="Product name" required>
-              <br>
-              <textarea class="form-control" name="descriptionProd" placeholder="Description" required></textarea>
-              <br>
-              <input type="number" step="0.01" class="form-control" name="prix" placeholder="Product price " required>
-              <br>
-              <input type="file" class="form-control" name="imgProd" require>
-            </div>
-        </div>
-
-        <div class="form-group mt-2">
-          <select class="form-control" name="categ">
-            <?php
-            foreach ($categories as $index => $catP) {
-              echo print '<option value="' . $catP['id_c'] . '">' . $catP['nom_c'] . '</option>
-                ';
-            }
-            ?>
-          </select>
-        </div>
-
-        <div class="form-group mt-2 mr-2 ml-2"><input type="number" name="quantite" class="form-control" placeholder="Quantite" required></div>
-        <input type="hidden" name="creator" value="<?php echo $_SESSION['id_a'] ?>">
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Add</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
   <?php
 
-  foreach ($product as $index => $prod) { ?>
+  foreach ($stock as $index => $stM) { ?>
     <!-- Modal  Modify-->
-    <div class="modal fade" id="modifyModal<?php echo $prod['id_p'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modifyModal<?php echo $stM['id_s'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="modifyModal">Modify product</h5>
+            <h5 class="modal-title" id="modifyModal">Update quantite</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <form method="post" action="modifyP.php" enctype="multipart/form-data">
+            <form method="post" action="modifyS.php">
               <div class="form-group">
-                <input type="hidden" value="<?php echo $prod['id_p']; ?>" name="id_p" required>
-                <input type="text" class="form-control" name="nomProd" value="<?php echo $prod['nom'] ?>" required placeholder="Product name">
+                <input type="hidden" value="<?php echo $stM['id_s']; ?>" name="id_s" required>
+                <p>Quantite of the product : <?php echo $stM['nom']; ?></p>
+                <input type="number" class="form-control" name="quantite" value="<?php echo $stM['quantite'] ?>" required placeholder="product Qtte">
                 <br>
-                <textarea class="form-control" name="descriptionProd" placeholder="Description"><?php echo $prod['description'] ?></textarea>
-                <br>
-                <input type="number" step="0.01" class="form-control" name="prix" placeholder="Product price " required>
-                <br>
-                <input type="file" class="form-control" name="imgProd" require>
-              </div>
-              <div class="form-group">
-                <select class="form-control" name="categ">
-                  <?php
-                  foreach ($categories as $index => $catP) {
-                    echo print '<option value="' . $catP['id_c'] . '">' . $catP['nom_c'] . '</option>
-                ';
-                  }
-                  ?>
-                </select>
-
               </div>
           </div>
           <div class="modal-footer">
