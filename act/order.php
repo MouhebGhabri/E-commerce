@@ -3,10 +3,10 @@
 session_start();
 
 
-// if (!isset($_SESSION['username'])) {
-//   header('location:../Login.php');
-//   exit();
-// }
+if (!isset($_SESSION['username'])) {
+  header('location:../Login.php');
+  exit();
+}
 
 include '../connect.php';
 

@@ -31,7 +31,10 @@
                 print '
                 <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="profile.php">Profile</a>
-              </li>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="cart.php">Cart'.$_SESSION['cart'].'</a>
+                </li>
               ';
               }else{
                 print ' 

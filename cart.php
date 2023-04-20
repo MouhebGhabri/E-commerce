@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'inc/func.php';
+$TOT=$_SESSION['cart'][1];
 $categories = getCategory();
 
 if (!empty($_POST)) { //checking search btn
@@ -68,7 +69,12 @@ if (isset($_SESSION['cart'])) {
 
           </tbody>
         </table>
-    <button class="btn btn-success" style="width: 100px" ;>Confirm</button>
+        <div class="text-end mt-3">
+          <h3>
+            <?php echo $TOT;?> dt</h3>
+          <button class="btn btn-success" style="width: 100px" ;>Confirm</button>
+          <hr> 
+        </div>
   </div>
 
   <?php include('inc/footer.php'); ?>
