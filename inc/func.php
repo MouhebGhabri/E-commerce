@@ -100,9 +100,10 @@ function addUser($data){
     include 'connect.php';
 
     $mphash=md5($data['password']);
+    $date = date("Y-m-d");
 
     try{
-      $sqlQ = "INSERT INTO `user`(`username`, `email`, `password`, `phone`, `city`) VALUES ('".$data['username']."','".$data['email']."','".$mphash."','".$data['phone']."','".$data['city']."')";
+      $sqlQ = "INSERT INTO `user`(`username`, `email`, `password`, `phone`, `city`,`date_creation`) VALUES ('".$data['username']."','".$data['email']."','".$mphash."','".$data['phone']."','".$data['city']."','$date')";
 
       $resultat = $conn->query($sqlQ);
    

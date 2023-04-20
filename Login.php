@@ -12,6 +12,7 @@ if(!empty($_POST)){
 
   if(is_array($user) && count($user)>0){
     session_start();
+    $_SESSION['id']=$user['id'];
     $_SESSION['email'] = $user['email'] ;
     $_SESSION['username'] = $user['username'];
     $_SESSION['password'] = $user['password'];
@@ -64,10 +65,4 @@ if(!$user){
 }
 
 ?>
-
-  <!-- footer -->
-  <div class="bg-dark text-center p-4 mt-3">
-    <p class="text-white">Created by Mouheb And Khalil</p>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min
