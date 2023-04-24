@@ -9,7 +9,7 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="http://<?php echo $_SERVER['HTTP_HOST'];?>/WebProject/admin/categories/list.php">
-                  <span data-feather="file"></span>
+                  <span data-feather="list"></span>
                   categories
                 </a>
               </li>
@@ -21,8 +21,14 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="http://<?php echo $_SERVER['HTTP_HOST'];?>/WebProject/admin/stock/listS.php">
-                  <span data-feather="shopping-cart"></span>
+                  <span data-feather="package"></span>
                   Stock
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="http://<?php echo $_SERVER['HTTP_HOST'];?>/WebProject/admin/orders/listO.php">
+                  <span data-feather="align-center"></span>
+                  Order's
                 </a>
               </li>
               <li class="nav-item">

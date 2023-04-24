@@ -22,7 +22,7 @@ if(!isset($_SESSION['username'])){
 
 
 <div class="container">
-<h1>Hello  <span> <?php echo $_SESSION['username']."".$_SESSION['phone']; ?></span> </h1>
+<h1>Hello  <span> <?php echo $_SESSION['username']."  ".$_SESSION['phone']; ?></span> </h1>
 
 </div>
 <?php  include('inc/footer.php');?>

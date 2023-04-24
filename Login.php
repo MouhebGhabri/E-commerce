@@ -18,6 +18,8 @@ if(!empty($_POST)){
     $_SESSION['password'] = $user['password'];
     $_SESSION['phone'] = $user['phone'];
     $_SESSION['city'] = $user['city'];
+    $_SESSION['etat'] = $user['etat'];
+
     header('location:profile.php');
   }
 }

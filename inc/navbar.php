@@ -27,21 +27,33 @@
               }
               ?>
               </ul>
-              <?php  if(isset($_SESSION['username'])){
+              <?php 
+               if(isset($_SESSION['username'])){
                 print '
                 <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="profile.php">Profile</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="cart.php">Cart'.$_SESSION['cart'].'</a>
-                </li>
-              ';
+                </li>';
+
+                if(  isset($_SESSION['cart'][3]) && is_array($_SESSION['cart'][3])){
+                  print'
+                  <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="cart.php">Cart ('.count($_SESSION['cart'][3]).')</a>
+                  </li>
+                ';
+                }else{
+                                      print'
+                  <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="cart.php">Cart (0)</a>
+                  </li>
+                ';
+                }
+               
               }else{
                 print ' 
                 </li>
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="Login.php">Log in</a>
-                </li>
+               </li>
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="Signup.php">Sign up</a>
                 </li>
@@ -52,8 +64,8 @@
 
         </ul>
         <form class="d-flex"  action="index.php" method="POST">
-          <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <input class="form-control mr-2" type="search" placeholder="Search" name="search" aria-label="Search">
+          <button class="btn btn-outline-success mr-2 ml-2" type="submit">Search</button>
         </form>
 
         <?php 

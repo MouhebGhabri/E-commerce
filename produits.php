@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'inc/func.php';
 $categories = getCategory();
 
@@ -6,13 +7,9 @@ $categories = getCategory();
 if (isset($_GET['id_p'])) {
   $produit =  getProduitsById($_GET['id_p']);
 }
-
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,7 +21,7 @@ if (isset($_GET['id_p'])) {
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand" href="index.php">My Store</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,36 +34,40 @@ if (isset($_GET['id_p'])) {
               Category
             </a>
             <ul class="dropdown-menu">
-              <?php 
-              foreach($categories as $categorie){
-                print '<li><a class="dropdown-item" href="#">'.$categorie['nom_c'].'</a></li>';
+              <?php
+              foreach ($categories as $categorie) {
+                print '<li><a class="dropdown-item" href="#">' . $categorie['nom_c'] . '</a></li>';
               }
               ?>
-              </ul>
-              <?php  if(isset($_SESSION['username'])){
-                print '
+            </ul>
+            <?php if (isset($_SESSION['username'])) {
+              print '
                 <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="profile.php">Profile</a>
               </li>
               ';
-              }
-              ?>
-
+            }
+            ?>
         </ul>
-        <form class="d-flex"  action="index.php" method="POST">
+        <form class="d-flex" action="index.php" method="POST">
           <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
-
-        <?php 
-          if(isset($_SESSION['username'])){
-            print '         <a href="Logout.php" class="btn btn-primary">Logout</a>';
-          }
+        <?php
+        if (isset($_SESSION['username'])) {
+          print '         <a href="Logout.php" class="btn btn-primary">Logout</a>';
+        }
         ?>
       </div>
     </div>
   </nav>
-<div class="row col-12 mt-3 mb-3" ;>
+  <div class="row col-12 mt-3 mb-3" ;>
+    <?php if (isset($_SESSION['etat']) && $_SESSION['etat'] == 0) { 
+      print '
+    <div class="alert alert-danger text-center">Not a valid account</div>
+    ';
+    } ?>
+
     <div class="card col-8 offset-2">
       <img src="imgs/<?php echo $produit['image']; ?>" class="card-img-top" alt="...">
       <div class="card-body">
@@ -87,12 +88,14 @@ if (isset($_GET['id_p'])) {
         ?>
       </ul>
       <div class="col-12 m-2">
-      <form class="d-flex" action="act/order.php" method="post">
-        <input type="hidden" name="id_p" value="<?php echo $produit['id_p']; ?>">
-        <input type="number" class="form-control" name="quantite" required step="1">
-        <button type="submit" class="btn btn-success">Order</button>
-      </form>
-    </div>
+        <form class="d-flex" action="act/order.php" method="post">
+          <input type="hidden" name="id_p" value="<?php echo $produit['id_p']; ?>">
+          <input type="number" class="form-control" name="quantite" required step="1">
+          <button type="submit" <?php if (isset($_SESSION['etat']) && $_SESSION['etat'] == 0 || !isset($_SESSION['id'])) {
+                                  echo "disabled";
+                                } ?> class="btn btn-success">Order</button>
+        </form>
+      </div>
     </div>
     <div>
     </div>
