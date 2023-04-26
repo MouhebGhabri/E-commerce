@@ -8,11 +8,14 @@ include "../../connect.php";
 //cart state change
 function changeEtat($data){
   include "../../connect.php";
-  $sqlQ="UPDATE `panier` SET etat=".$data['etat']." WHERE id_pa=".$data['id_pa']."";
+  $sqlQ="UPDATE `panier` SET etat=".$data['etatc']." WHERE id_pa=".$data['id_pa']."";
   $result=exec($sqlQ);
-
+  return $result;
+  var_dump($result);
+  die;
 }
 if(isset($_POST['btnSubmit'])){
+  var_dump($_POST);
     changeEtat($_POST);
 }
 
@@ -26,7 +29,7 @@ if(isset($_POST['btnSubmit'])){
 
 function getCart(){
   include '../../connect.php';
-  $sqlQ="SELECT p.id_pa,u.username, u.phone, p.total, p.date_creation, po.nom,p.etat   FROM panier p, user u,commande c,produits po WHERE p.user=u.id";
+  $sqlQ="SELECT p.id_pa,u.username, u.phone, p.total, p.date_creation,p.etat   FROM panier p, user u,commande c WHERE p.user=u.id";
   $result =$conn->query($sqlQ);
   $paniers=$result->fetchAll();
   return $paniers;
@@ -111,7 +114,6 @@ $ordersALL=getAllOrders();
             <tr>
               <th scope="col">#</th>
               <th scope="col">Client name</th>
-              <th scope="col">Product</th>
               <th scope="col">Total</th>
               <th scope="col">Date</th>
               <th scope="col"></th>
@@ -126,7 +128,6 @@ $ordersALL=getAllOrders();
               echo print ' 
                       <th scope="row">' . $i . '</th>
                       <td>' . $order['username'] . '</td>
-                      <td>' . $order['nom'] . '</td>
                       <td>' . $order['total'] . ' dt</td>
                       <td>' . $order['date_creation'] . '</td>
                       <td>
